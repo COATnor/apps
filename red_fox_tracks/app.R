@@ -10,14 +10,11 @@ library(shiny)
 # Define UI for app  ----
 
 ui <- fluidPage(
-  sidebarLayout(
-    sidebarPanel(width = 0),
-    mainPanel(
-      leafletOutput("figure", width = "9in", height = "6in")
-    )
-  )
+  tags$head(
+    tags$link(rel = "stylesheet", type = "text/css", href = "style.css")
+  ),
+  leafletOutput("figure", height = "100vh")
 )
-
 
 # Define server logic ----
 server <- function(input, output) {
