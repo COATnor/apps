@@ -13,8 +13,8 @@ library("purrr")
 
 
 ## setup the connection to the data portal
-COAT_url <- "https://data.coat.no/" # write here the url to the COAT data portal
-COAT_key <- Sys.getenv("API_coat") # write here your API key (need to access private datasets and datasets under embargo)
+COAT_url <- Sys.getenv("COAT_URL") # write here the url to the COAT data portal
+COAT_key <- Sys.getenv("COAT_API") # write here your API key (need to access private datasets and datasets under embargo)
 # the API can be found on you page on the COAT data portal (log in and click on your name in the upper right corner of the page)
 # The use of an API key allows the user to access also non-public data
 
