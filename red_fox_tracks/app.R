@@ -113,15 +113,16 @@ server <- function(input, output) {
     group1$localtime <- group1$`Date & Time [GMT]` + 1 * 60 * 60
 
     # fox names
-    deviceIDs <- c("92158", "92156", "92162", "92160")
+    deviceIDs <- c("92158", "92156", "92162", "92160", "92638")
 
 
     foxnames <- data.frame(
-      name = c("Thorsen", "Kaptein Jan", "Mari", "Uhcci Biret"),
-      deviceID = c("92158", "92156", "92162", "92160"),
-      colour = c("yellow", "lime", "blue", "cyan"),
-      radius = c(4, 4, 4, 4),
-      radiuslast = c(12, 12, 12, 12)
+      name = c("Thorsen", "Kaptein Jan", "Mari", "Uhcci Biret", "Murphy"),
+      deviceID = c("92158", "92156", "92162", "92160", "92638"),
+      colour = c("yellow", "lime", "blue", "cyan", "orange"),
+      deployment = c("2021-05-19T18:00:00", "2021-11-04T22:30:00", "2021-11-05T05:30:00", "2021-11-10T22:30:00", "2022-11-08T22:30:00"),
+      radius = c(4, 4, 4, 4, 4),
+      radiuslast = c(12, 12, 12, 12, 12)
     )
 
 
@@ -130,6 +131,7 @@ server <- function(input, output) {
       group1$colour[group1$`Device ID` == deviceIDs[i]] <- foxnames$colour[foxnames$deviceID == deviceIDs[i]]
       group1$radius[group1$`Device ID` == deviceIDs[i]] <- foxnames$radius[foxnames$deviceID == deviceIDs[i]]
       group1$radiuslast[group1$`Device ID` == deviceIDs[i]] <- foxnames$radiuslast[foxnames$deviceID == deviceIDs[i]]
+      group1$deployment[group1$`Device ID` == deviceIDs[i]] <- foxnames$deployment[foxnames$deviceID == deviceIDs[i]]
     }
 
     # make all the non-named foxes transparent or 0 radius in points
@@ -148,6 +150,10 @@ server <- function(input, output) {
     map <- leaflet() %>%
       addProviderTiles(providers$Esri.WorldImagery) %>%
       setView(lat = 70.45, lng = 29.85, zoom = 8) %>%
+      addScaleBar(
+        position = c("bottomright"),
+        options = scaleBarOptions(imperial = FALSE)
+      ) %>%
       addMiniMap(
         toggleDisplay = TRUE,
         tiles = providers$Stamen.TonerLite
@@ -157,11 +163,11 @@ server <- function(input, output) {
       foxingroup1 <- group1[DevName == n]
 
       map <- addPolylines(map,
-        lng = foxingroup1$Longitude, lat = foxingroup1$Latitude,
+        lng = foxingroup1$Longitude[foxingroup1$deployment < foxingroup1$DateTimeGMT], lat = foxingroup1$Latitude[foxingroup1$deployment < foxingroup1$DateTimeGMT], # this makes sure than only positions after deployment date are plotted
         weight = 0.5, color = foxingroup1$colour, opacity = 0.1
       )
       map <- addCircleMarkers(map,
-        lng = foxingroup1$Longitude, lat = foxingroup1$Latitude,
+        lng = foxingroup1$Longitude[foxingroup1$deployment < foxingroup1$DateTimeGMT], lat = foxingroup1$Latitude[foxingroup1$deployment < foxingroup1$DateTimeGMT], # this makes sure than only positions after deployment date are plotted
         popup = paste(
           foxingroup1$DevName, "<br>",
           foxingroup1$localtime, "<br>",
@@ -175,7 +181,7 @@ server <- function(input, output) {
       recentpos <- filter(foxingroup1, DateTimeGMT == max(DateTimeGMT))
 
       map <- addCircleMarkers(map,
-        lng = recentpos$Longitude, lat = recentpos$Latitude,
+        lng = recentpos$Longitude[recentpos$deployment < recentpos$DateTimeGMT], lat = recentpos$Latitude[recentpos$deployment < recentpos$DateTimeGMT], # this makes sure than only positions after deployment date are plotted
         popup = paste(
           recentpos$DevName, "<br>",
           recentpos$localtime, "<br>",
