@@ -113,16 +113,16 @@ server <- function(input, output) {
     group1$localtime <- group1$`Date & Time [GMT]` + 1 * 60 * 60
 
     # fox names
-    deviceIDs <- c("92158", "92156", "92162", "92160", "92638", "92642")
+    deviceIDs <- c("92158", "92156", "92162", "92160", "92638", "92642", "92636")
 
 
     foxnames <- data.frame(
-      name = c("Thorsen", "Kaptein Jan", "Mari", "Uhcci Biret", "Murphy", "Geir"),
-      deviceID = c("92158", "92156", "92162", "92160", "92638", "92642"),
-      colour = c("yellow", "lime", "blue", "cyan", "orange", "cyan"),
-      deployment = c("2021-05-19T18:00:00", "2021-11-04T22:30:00", "2021-11-05T05:30:00", "2021-11-10T22:30:00", "2022-11-08T22:30:00", "2023-10-15T02:00:00"),
-      radius = c(4, 4, 4, 4, 4, 4),
-      radiuslast = c(12, 12, 12, 12, 12, 12)
+      name = c("Thorsen", "Kaptein Jan", "Mari", "Uhcci Biret", "Murphy", "Geir", "Tispe uten navn"),
+      deviceID = c("92158", "92156", "92162", "92160", "92638", "92642", "92636"),
+      colour = c("yellow", "lime", "blue", "cyan", "orange", "cyan", "yellow"),
+      deployment = c("2021-05-19T18:00:00", "2021-11-04T22:30:00", "2021-11-05T05:30:00", "2021-11-10T22:30:00", "2022-11-08T22:30:00", "2023-10-15T02:00:00", "2023-10-19T23:00:00"),
+      radius = c(4, 4, 4, 4, 4, 4, 4),
+      radiuslast = c(12, 12, 12, 12, 12, 12, 12)
     )
 
 
