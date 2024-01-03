@@ -1,7 +1,12 @@
-FROM rocker/shiny:4.1.2
+FROM docker.io/rocker/shiny:4.1.2
 
-ENV DEBIAN_FRONTEND=noninteractive
-RUN apt-get update && apt-get install -qq libxml2
+RUN --mount=type=cache,sharing=locked,target=/var/cache/apt \
+    --mount=type=cache,sharing=locked,target=/var/lib/apt/lists \
+    rm -f /etc/apt/apt.conf.d/docker-clean; \
+    echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' \
+        > /etc/apt/apt.conf.d/keep-cache && \
+    apt-get update && \
+    apt-get install -qy --no-install-recommends libxml2
 
 RUN rm -rf /srv/shiny-server/* /opt/shiny-server/samples/
 WORKDIR /srv/shiny-server
