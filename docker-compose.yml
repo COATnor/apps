@@ -1,0 +1,8 @@
+version: "3.0"
+services:
+  app:
+    build: .
+    environment:
+    - lotekpassword
+    ports:
+    - 3838:3838/TCP
