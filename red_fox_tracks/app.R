@@ -95,7 +95,6 @@ server <- function(input, output) {
     setkey(group1, "Device ID")
 
 
-
     #-----------------------------------------
 
     # ============ select devices/ time periods /DOP========================
@@ -113,17 +112,17 @@ server <- function(input, output) {
     group1$localtime <- group1$`Date & Time [GMT]` + 1 * 60 * 60
 
     # fox names
-    deviceIDs <- c("92158", "92156", "92162", "92160", "92638", "92642", "92636", "92166", "92161", "92637", "92635", "92639", "92647", "92644", "92640")
+    deviceIDs <- c("92158", "92156", "92162", "92160", "92638", "92642", "92636", "92166", "92161", "92637", "92635", "92639", "92647", "92163", "94418")
 
 
     foxnames <- data.frame(
-      name = c("Thorsen", "Kaptein Jan", "Mari", "Uhcci Biret", "Murphy", "Geir", "Kate", "Pedersen", "Wilhelmina", "Willem", "Tina", "Simmon", "Sarre", "Clara", "Kate"),
-      deviceID = c("92158", "92156", "92162", "92160", "92638", "92642", "92636", "92166", "92161", "92637", "92635", "92639", "92647", "92644", "92640"),
-      colour = c("yellow", "lime", "blue", "cyan", "orange", "cyan", "yellow", "magenta", "orange", "cyan", "magenta", "lime", "blue", "red", "yellow"),
+      name = c("Thorsen", "Kaptein Jan", "Mari", "Uhcci Biret", "Murphy", "Geir", "Kate", "Pedersen", "Wilhelmina", "Willem", "Tina", "Simmon", "Sarre", "Pelkonen", "rev"),
+      deviceID = c("92158", "92156", "92162", "92160", "92638", "92642", "92636", "92166", "92161", "92637", "92635", "92639", "92647", "92163", "94418"),
+      colour = c("yellow", "lime", "blue", "cyan", "orange", "cyan", "yellow", "magenta", "orange", "cyan", "magenta", "lime", "blue", "magenta", "cyan"),
       deployment = c(
         "2021-05-19T18:00:00", "2021-11-04T22:30:00", "2021-11-05T05:30:00", "2021-11-10T22:30:00", "2022-11-08T22:30:00",
         "2023-10-15T02:00:00", "2023-10-19T23:00:00", "2023-11-29T12:00:00", "2024-10-17T03:00:00", "2024-10-23T01:00:00",
-        "2024-10-26T02:00:00", "2024-11-01T01:00:00", "2024-11-05T01:00:00", "2024-11-07T21:00:00", "2024-12-01T14:00:00"
+        "2024-10-26T02:00:00", "2024-11-01T01:00:00", "2024-11-05T01:00:00", "2025-11-05T12:00:00", "2025-11-13T21:00:00"
       ),
       radius = c(4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4),
       radiuslast = c(12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12)
