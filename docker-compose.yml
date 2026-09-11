@@ -1,11 +1,58 @@
 services:
+  reverse-proxy:
+    image: traefik:v3.7
+    command:
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
+      - --entrypoints.web.address=:80
+      - --log.level=INFO
+    ports:
+      - 3838:80/TCP
+    volumes:
+      - ${XDG_RUNTIME_DIR:-/var/run}/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - web
+
+  index:
+    build: index
+    expose:
+      - 80
+    networks:
+      - web
+    labels:
+      - traefik.enable=true
+      - 'traefik.http.routers.index.rule=Path(`/`) || PathPrefix(`/assets/`)'
+      - traefik.http.routers.index.entrypoints=web
+      - traefik.http.services.index.loadbalancer.server.port=80
+
   red_fox_tracks:
     build: red_fox_tracks
     env_file: red_fox_tracks/.env
-    ports:
-    - 3838:3838/TCP
+    expose:
+      - 3838
+    networks:
+      - web
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.red-fox-tracks.rule=PathPrefix(`/red_fox_tracks`)
+      - traefik.http.routers.red-fox-tracks.entrypoints=web
+      - traefik.http.routers.red-fox-tracks.middlewares=red-fox-tracks-strip
+      - traefik.http.middlewares.red-fox-tracks-strip.stripprefix.prefixes=/red_fox_tracks
+      - traefik.http.services.red-fox-tracks.loadbalancer.server.port=3838
   small_rodents_abundance:
     build: small_rodents_abundance
     env_file: small_rodents_abundance/.env
-    ports:
-    - 3839:3838/TCP
+    expose:
+      - 3838
+    networks:
+      - web
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.small-rodents-abundance.rule=PathPrefix(`/small_rodents_abundance`)
+      - traefik.http.routers.small-rodents-abundance.entrypoints=web
+      - traefik.http.routers.small-rodents-abundance.middlewares=small-rodents-abundance-strip
+      - traefik.http.middlewares.small-rodents-abundance-strip.stripprefix.prefixes=/small_rodents_abundance
+      - traefik.http.services.small-rodents-abundance.loadbalancer.server.port=3838
+
+networks:
+  web:

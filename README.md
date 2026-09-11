@@ -5,8 +5,11 @@ docker compose build
 docker compose up
 ```
 
-- Red fox tracks: http://localhost:3838
-- Small rodents abundance: http://localhost:3839
+Everything is served through Traefik on http://localhost:3838:
+
+- COAT apps index: http://localhost:3838/
+- Red fox tracks: http://localhost:3838/red_fox_tracks/
+- Small rodents abundance: http://localhost:3838/small_rodents_abundance/
 
 # pre-commit
 
