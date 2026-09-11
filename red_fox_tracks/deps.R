@@ -1,8 +1,0 @@
-install.packages("httr")
-install.packages("jsonlite")
-install.packages("lubridate")
-install.packages("data.table")
-install.packages("tidyverse")
-install.packages("leaflet")
-install.packages("shiny")
-install.packages("reprex")

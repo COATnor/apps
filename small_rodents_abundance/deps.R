@@ -1,5 +1,0 @@
-install.packages("shiny")
-install.packages("ckanr")
-install.packages("sciplot")
-install.packages("plotrix")
-install.packages("purrr")
