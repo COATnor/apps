@@ -1,9 +1,12 @@
 # Docker
 
 ```bash
-docker build -t coat-shiny .
-docker run --rm -e lotekpassword=$LOTEKPASSWORD -e COAT_API=$COAT_API -e COAT_URL=$COAT_URL -p 3838:3838 coat-shiny
+docker compose build
+docker compose up
 ```
+
+- Red fox tracks: http://localhost:3838
+- Small rodents abundance: http://localhost:3839
 
 # pre-commit
 

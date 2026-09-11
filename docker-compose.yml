@@ -1,8 +1,11 @@
-version: "3.0"
 services:
-  app:
-    build: .
-    environment:
-    - lotekpassword
+  red_fox_tracks:
+    build: red_fox_tracks
+    env_file: red_fox_tracks/.env
     ports:
     - 3838:3838/TCP
+  small_rodents_abundance:
+    build: small_rodents_abundance
+    env_file: small_rodents_abundance/.env
+    ports:
+    - 3839:3838/TCP
