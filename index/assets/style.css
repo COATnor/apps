@@ -1,0 +1,77 @@
+/* COAT apps index. Typeface follows coat.no (Open Sans, system fallback). */
+body {
+  font-family: "Open Sans", -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  margin: 0 auto;
+  max-width: 42em;
+  padding: 2em 1.5em;
+  color: #111;
+  background: #fff;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+  border-bottom: 1px solid #999;
+  padding-bottom: 1em;
+}
+
+header img {
+  width: 72px;
+  height: 72px;
+}
+
+header h1 {
+  font-size: 1.6em;
+  margin: 0;
+}
+
+header p {
+  margin: 0.2em 0 0;
+  color: #444;
+}
+
+main {
+  display: grid;
+  gap: 1em;
+  margin: 1.5em 0;
+}
+
+.card {
+  display: block;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 1em 1.2em;
+  text-decoration: none;
+  color: inherit;
+}
+
+.card:hover {
+  border-color: #00c;
+}
+
+.card h2 {
+  font-size: 1.2em;
+  margin: 0 0 0.3em;
+  color: #00c;
+}
+
+.card p {
+  margin: 0;
+  color: #333;
+}
+
+footer {
+  border-top: 1px solid #999;
+  padding-top: 0.8em;
+  color: #444;
+  font-size: 0.9em;
+}
+
+footer a {
+  color: #00c;
+}
+
+footer a:visited {
+  color: #609;
+}
