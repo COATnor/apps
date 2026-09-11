@@ -22,7 +22,8 @@ ui <- fluidPage(
     )
   ),
   leafletOutput("figure", height = "100vh"),
-  tags$script("
+  tags$script(
+    "
     $(document).one('shiny:value', function(event) {
       if (event.name === 'figure') { $('#loading-overlay').fadeOut(400); }
     });
@@ -30,7 +31,8 @@ ui <- fluidPage(
       $('#loading-overlay p').text('Connection lost. Please reload the page.');
       $('#loading-overlay').show();
     });
-  ")
+  "
+  )
 )
 
 # Define server logic ----
@@ -52,7 +54,12 @@ server <- function(input, output) {
       username = username,
       password = password
     )
-    res <- POST("https://webservice.lotek.com/API/user/login", body = login, encode = "form", verbose())
+    res <- POST(
+      "https://webservice.lotek.com/API/user/login",
+      body = login,
+      encode = "form",
+      verbose()
+    )
     #-------------------------------
 
     #---from PullToken.R:--------------
@@ -68,7 +75,6 @@ server <- function(input, output) {
     url <- "https://webservice.lotek.com/API"
     key <- token
 
-
     ####### POSITION DATA - ALL. No Device ID Necessary#########
 
     today <- Sys.Date()
@@ -81,12 +87,21 @@ server <- function(input, output) {
     start <- paste0(weekago, "T", CET, "Z")
     # start = "2019-03-02T00:00:00Z"   ###MUST BE IN yyyy-m-dThh:mm:00z format###
 
-
     #---from DataALL.R:-------------------
-    data <- paste(url, "/positions/findByDate?from=", start, "&to=", end, sep = "")
+    data <- paste(
+      url,
+      "/positions/findByDate?from=",
+      start,
+      "&to=",
+      end,
+      sep = ""
+    )
 
     GET(data, add_headers(Authorization = paste("Bearer", key, sep = " ")))
-    positions <- GET(data, add_headers(Authorization = paste("Bearer", key, sep = " ")))
+    positions <- GET(
+      data,
+      add_headers(Authorization = paste("Bearer", key, sep = " "))
+    )
 
     cont <- content(positions, as = "parsed", type = "application/json")
 
@@ -100,17 +115,67 @@ server <- function(input, output) {
       c("X16", "X21", "X22", "X3", "X4", "X5", "X10", "X13", "X11", "X12")
     )
 
-    names(nearly) <- c("DevName", "Device ID", "DateTimeGMT", "Latitude", "Longitude", "Altitude[m]", "DOP", "Temperature[C]", "MainV", "BackupV", "ChannelStatus", "UploadTime", "ECEFx", "ECEFy", "ECEFz", "RxStatus", "FixDuration", "bHasTempVoltage", "DeltaTime", "FixType", "CEPradius", "CRC")
+    names(nearly) <- c(
+      "DevName",
+      "Device ID",
+      "DateTimeGMT",
+      "Latitude",
+      "Longitude",
+      "Altitude[m]",
+      "DOP",
+      "Temperature[C]",
+      "MainV",
+      "BackupV",
+      "ChannelStatus",
+      "UploadTime",
+      "ECEFx",
+      "ECEFy",
+      "ECEFz",
+      "RxStatus",
+      "FixDuration",
+      "bHasTempVoltage",
+      "DeltaTime",
+      "FixType",
+      "CEPradius",
+      "CRC"
+    )
 
-    nearly[, "Date & Time [GMT]" := parse_date_time(nearly$DateTimeGMT, orders = "ymd_HMS")]
+    nearly[,
+      "Date & Time [GMT]" := parse_date_time(
+        nearly$DateTimeGMT,
+        orders = "ymd_HMS"
+      )
+    ]
 
     group1 <- setcolorder(
       nearly,
-      c("DevName", "Device ID", "Date & Time [GMT]", "Latitude", "Longitude", "Altitude[m]", "DOP", "Temperature[C]", "MainV", "BackupV", "ChannelStatus", "ECEFx", "ECEFy", "ECEFz", "RxStatus", "FixDuration", "bHasTempVoltage", "DeltaTime", "FixType", "CEPradius", "CRC", "DateTimeGMT")
+      c(
+        "DevName",
+        "Device ID",
+        "Date & Time [GMT]",
+        "Latitude",
+        "Longitude",
+        "Altitude[m]",
+        "DOP",
+        "Temperature[C]",
+        "MainV",
+        "BackupV",
+        "ChannelStatus",
+        "ECEFx",
+        "ECEFy",
+        "ECEFz",
+        "RxStatus",
+        "FixDuration",
+        "bHasTempVoltage",
+        "DeltaTime",
+        "FixType",
+        "CEPradius",
+        "CRC",
+        "DateTimeGMT"
+      )
     )
 
     setkey(group1, "Device ID")
-
 
     #-----------------------------------------
 
@@ -131,23 +196,35 @@ server <- function(input, output) {
     # fox names
     deviceIDs <- c("92163", "94418", "94419")
 
-
     foxnames <- data.frame(
       name = c("Pelkonen", "Phaphan", "Wilhelmina"),
       deviceID = c("92163", "94418", "94419"),
       colour = c("magenta", "cyan", "orange"),
-      deployment = c("2025-11-05T12:00:00", "2025-11-13T21:00:00", "2025-12-04T16:00:00"),
+      deployment = c(
+        "2025-11-05T12:00:00",
+        "2025-11-13T21:00:00",
+        "2025-12-04T16:00:00"
+      ),
       radius = c(4, 4, 4),
       radiuslast = c(12, 12, 4)
     )
 
-
     for (i in 1:length(deviceIDs)) {
-      group1$DevName[group1$`Device ID` == deviceIDs[i]] <- foxnames$name[foxnames$deviceID == deviceIDs[i]]
-      group1$colour[group1$`Device ID` == deviceIDs[i]] <- foxnames$colour[foxnames$deviceID == deviceIDs[i]]
-      group1$radius[group1$`Device ID` == deviceIDs[i]] <- foxnames$radius[foxnames$deviceID == deviceIDs[i]]
-      group1$radiuslast[group1$`Device ID` == deviceIDs[i]] <- foxnames$radiuslast[foxnames$deviceID == deviceIDs[i]]
-      group1$deployment[group1$`Device ID` == deviceIDs[i]] <- foxnames$deployment[foxnames$deviceID == deviceIDs[i]]
+      group1$DevName[group1$`Device ID` == deviceIDs[i]] <- foxnames$name[
+        foxnames$deviceID == deviceIDs[i]
+      ]
+      group1$colour[group1$`Device ID` == deviceIDs[i]] <- foxnames$colour[
+        foxnames$deviceID == deviceIDs[i]
+      ]
+      group1$radius[group1$`Device ID` == deviceIDs[i]] <- foxnames$radius[
+        foxnames$deviceID == deviceIDs[i]
+      ]
+      group1$radiuslast[
+        group1$`Device ID` == deviceIDs[i]
+      ] <- foxnames$radiuslast[foxnames$deviceID == deviceIDs[i]]
+      group1$deployment[
+        group1$`Device ID` == deviceIDs[i]
+      ] <- foxnames$deployment[foxnames$deviceID == deviceIDs[i]]
     }
 
     # make all the non-named foxes transparent or 0 radius in points
@@ -160,7 +237,6 @@ server <- function(input, output) {
     group1$DevName[group1$DevName == ""] <- "Test Halsbånd, ikke på rev"
 
     # ===================plotting===================
-
 
     uniquefox <- unique(group1[, DevName])
     map <- leaflet() %>%
@@ -178,16 +254,34 @@ server <- function(input, output) {
     for (n in uniquefox) {
       foxingroup1 <- group1[DevName == n]
 
-      map <- addPolylines(map,
-        lng = foxingroup1$Longitude[foxingroup1$deployment < foxingroup1$DateTimeGMT], lat = foxingroup1$Latitude[foxingroup1$deployment < foxingroup1$DateTimeGMT], # this makes sure than only positions after deployment date are plotted
-        weight = 0.5, color = foxingroup1$colour, opacity = 0.1
+      map <- addPolylines(
+        map,
+        lng = foxingroup1$Longitude[
+          foxingroup1$deployment < foxingroup1$DateTimeGMT
+        ],
+        lat = foxingroup1$Latitude[
+          foxingroup1$deployment < foxingroup1$DateTimeGMT
+        ], # this makes sure than only positions after deployment date are plotted
+        weight = 0.5,
+        color = foxingroup1$colour,
+        opacity = 0.1
       )
-      map <- addCircleMarkers(map,
-        lng = foxingroup1$Longitude[foxingroup1$deployment < foxingroup1$DateTimeGMT], lat = foxingroup1$Latitude[foxingroup1$deployment < foxingroup1$DateTimeGMT], # this makes sure than only positions after deployment date are plotted
+      map <- addCircleMarkers(
+        map,
+        lng = foxingroup1$Longitude[
+          foxingroup1$deployment < foxingroup1$DateTimeGMT
+        ],
+        lat = foxingroup1$Latitude[
+          foxingroup1$deployment < foxingroup1$DateTimeGMT
+        ], # this makes sure than only positions after deployment date are plotted
         popup = paste(
-          foxingroup1$DevName, "<br>",
-          foxingroup1$localtime, "<br>",
-          "Temperatur", group1$`Temperature[C]`, "C"
+          foxingroup1$DevName,
+          "<br>",
+          foxingroup1$localtime,
+          "<br>",
+          "Temperatur",
+          group1$`Temperature[C]`,
+          "C"
         ),
         radius = foxingroup1$radius,
         stroke = FALSE,
@@ -196,12 +290,18 @@ server <- function(input, output) {
       )
       recentpos <- filter(foxingroup1, DateTimeGMT == max(DateTimeGMT))
 
-      map <- addCircleMarkers(map,
-        lng = recentpos$Longitude[recentpos$deployment < recentpos$DateTimeGMT], lat = recentpos$Latitude[recentpos$deployment < recentpos$DateTimeGMT], # this makes sure than only positions after deployment date are plotted
+      map <- addCircleMarkers(
+        map,
+        lng = recentpos$Longitude[recentpos$deployment < recentpos$DateTimeGMT],
+        lat = recentpos$Latitude[recentpos$deployment < recentpos$DateTimeGMT], # this makes sure than only positions after deployment date are plotted
         popup = paste(
-          recentpos$DevName, "<br>",
-          recentpos$localtime, "<br>",
-          "Temperatur", recentpos$`Temperature[C]`, "C"
+          recentpos$DevName,
+          "<br>",
+          recentpos$localtime,
+          "<br>",
+          "Temperatur",
+          recentpos$`Temperature[C]`,
+          "C"
         ),
         radius = 12,
         stroke = TRUE,
