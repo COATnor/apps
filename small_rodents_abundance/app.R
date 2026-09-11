@@ -27,9 +27,26 @@ name <- "V_rodents_snaptrapping_abundance_regional" # write here the name includ
 # Define UI for app  ----
 ui <- fluidPage(
   tags$head(
-    tags$link(rel = "stylesheet", type = "text/css", href = "style.css")
+    tags$link(rel = "stylesheet", type = "text/css", href = "style.css?v=2")
   ),
-  plotOutput("figure", height = "100vh", width = "100%")
+  tags$div(
+    id = "loading-overlay",
+    tags$div(
+      class = "loading-box",
+      tags$div(class = "loading-spinner"),
+      tags$p("Loading abundance data, please wait...")
+    )
+  ),
+  plotOutput("figure", height = "100vh", width = "100%"),
+  tags$script("
+    $(document).one('shiny:value', function(event) {
+      if (event.name === 'figure') { $('#loading-overlay').fadeOut(400); }
+    });
+    $(document).on('shiny:disconnected shiny:error', function() {
+      $('#loading-overlay p').text('Connection lost. Please reload the page.');
+      $('#loading-overlay').show();
+    });
+  ")
 )
 
 # Define server logic ----
