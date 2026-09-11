@@ -11,9 +11,26 @@ library(shiny)
 
 ui <- fluidPage(
   tags$head(
-    tags$link(rel = "stylesheet", type = "text/css", href = "style.css")
+    tags$link(rel = "stylesheet", type = "text/css", href = "style.css?v=2")
   ),
-  leafletOutput("figure", height = "100vh")
+  tags$div(
+    id = "loading-overlay",
+    tags$div(
+      class = "loading-box",
+      tags$div(class = "loading-spinner"),
+      tags$p("Loading fox tracks, please wait...")
+    )
+  ),
+  leafletOutput("figure", height = "100vh"),
+  tags$script("
+    $(document).one('shiny:value', function(event) {
+      if (event.name === 'figure') { $('#loading-overlay').fadeOut(400); }
+    });
+    $(document).on('shiny:disconnected shiny:error', function() {
+      $('#loading-overlay p').text('Connection lost. Please reload the page.');
+      $('#loading-overlay').show();
+    });
+  ")
 )
 
 # Define server logic ----

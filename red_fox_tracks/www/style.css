@@ -1,3 +1,33 @@
 .container-fluid {
   padding: 0px;
 }
+
+#loading-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+}
+
+.loading-box {
+  text-align: center;
+  font-family: sans-serif;
+  color: #333;
+}
+
+.loading-spinner {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 1em;
+  border: 5px solid #ddd;
+  border-top-color: #337ab7;
+  border-radius: 50%;
+  animation: loading-spin 0.8s linear infinite;
+}
+
+@keyframes loading-spin {
+  to { transform: rotate(360deg); }
+}
