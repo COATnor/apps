@@ -1,3 +1,13 @@
+# Configuration
+
+Each app reads its secrets from a local `.env` file, which is never
+committed. Copy the template and fill in the values:
+
+```bash
+cp red_fox_tracks/env.template red_fox_tracks/.env
+cp small_rodents_abundance/env.template small_rodents_abundance/.env
+```
+
 # Docker
 
 ```bash
