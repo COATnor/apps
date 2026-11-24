@@ -194,19 +194,15 @@ server <- function(input, output) {
     group1$localtime <- group1$`Date & Time [GMT]` + 1 * 60 * 60
 
     # fox names
-    deviceIDs <- c("92163", "94418", "94419")
+    deviceIDs <- c("94416", "94420")
 
     foxnames <- data.frame(
-      name = c("Pelkonen", "Phaphan", "Wilhelmina"),
-      deviceID = c("92163", "94418", "94419"),
-      colour = c("magenta", "cyan", "orange"),
-      deployment = c(
-        "2025-11-05T12:00:00",
-        "2025-11-13T21:00:00",
-        "2025-12-04T16:00:00"
-      ),
-      radius = c(4, 4, 4),
-      radiuslast = c(12, 12, 4)
+      name = c("Roger", "Valeri"),
+      deviceID = c("94416", "94420"),
+      colour = c("cyan", "orange"),
+      deployment = c("2026-11-02T12:00:00", "2025-11-21T21:00:00"),
+      radius = c(4, 4),
+      radiuslast = c(12, 12)
     )
 
     for (i in 1:length(deviceIDs)) {
